@@ -4,7 +4,7 @@ A **D**omain **P**arser for **A**lphafold **M**odels
 DPAM: A Domain Parser for AlphaFold Models （https://onlinelibrary.wiley.com/doi/full/10.1002/pro.4548)
 
 ## Updates:
-Added --mode argument for ai flag (2023-09-04)
+Dockerfile and Docker image updated to include --mode argument for domain predictions. (2023-09-04)
 
 A docker image for DPAM v2.0 can be dowloaded by **docker pull conglab/dpam:latest** and previous version (v1.0) is moved to v1.0 directory (2023-12-10) . New version includes domain classification based on ECOD database and addresses over-segmentation for some proteins. **Warning**: current Docker image only works on AMD x86, not Apple M series chip. We're updating it for the compatibility. Stay tuned!
 Upload domain parser results for six model organisms.  (2022-12-6)
@@ -48,17 +48,17 @@ For Singularity:
 ### Quick test
 For Docker:
 
-    python run_dpam_docker.py --dataset test --input_dir example  --databases_dir databases --threads 32
+    python run_dpam_docker.py --dataset test --input_dir example  --databases_dir databases --threads 32 --mode cl
 
 For Singularity:
 
-    python ./run_dpam_singularity.py --databases_dir databases --input_dir example --dataset test --threads 32 --image_name dpam.sif`
+    python ./run_dpam_singularity.py --databases_dir databases --input_dir example --dataset test --threads 32 --image_name dpam.sif --mode cl
 
 ## Usage
 <pre>python run_dpam_docker.py [-h] --databases_dir DATABASES_DIR --input_dir
                     INPUT_DIR --dataset DATASET
                     [--image_name IMAGE_NAME] [--threads THREADS]
-                    [--log_file LOG_FILE]</pre>
+                    [--log_file LOG_FILE] [--mode MODE]</pre>
 
 ### Arguments
 
@@ -83,6 +83,9 @@ For Singularity:
 - `--log_file LOG_FILE`  
   Specify a file where the logs should be saved. If not provided, logs will be displayed in the standard output.
 
+  - `--mode MODE`  
+  Specify mode for domain predictions between 'cl'= classical statistics-based or 'ai'= convolutional neural network-based. If not provided, default mode is 'cl'.
+
 ### Input organization
 
 Before running the wrapper, the `INPUT_DIR` needs to be in the following structure:
@@ -103,7 +106,7 @@ In the example test in **Quick test** above,
 
 **exmaple command**:
 
-`python run_dpam_docker.py --dataset test --input_dir example  --databases_dir databases --threads 32`
+`python run_dpam_docker.py --dataset test --input_dir example  --databases_dir databases --threads 32 --mode cl`
 
 `databases` is the directory uncompressed fromd databases.tar.gz from our lab server. 
 
