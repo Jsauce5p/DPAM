@@ -4,7 +4,7 @@ A **D**omain **P**arser for **A**lphafold **M**odels
 DPAM: A Domain Parser for AlphaFold Models （https://onlinelibrary.wiley.com/doi/full/10.1002/pro.4548)
 
 ## Updates:
-Dockerfile and Docker image updated to include --mode argument for domain predictions. (2023-09-04)
+Dockerfile and Docker image updated to include mode option for domain predictions. run_dpam_docker.py and run_dpam_singularity.py updated to include --mode flag. Scripts and weights for ai pipeline added. (2023-09-04)
 
 A docker image for DPAM v2.0 can be dowloaded by **docker pull conglab/dpam:latest** and previous version (v1.0) is moved to v1.0 directory (2023-12-10) . New version includes domain classification based on ECOD database and addresses over-segmentation for some proteins. **Warning**: current Docker image only works on AMD x86, not Apple M series chip. We're updating it for the compatibility. Stay tuned!
 Upload domain parser results for six model organisms.  (2022-12-6)
