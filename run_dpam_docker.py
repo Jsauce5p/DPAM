@@ -67,7 +67,7 @@ def check_inputs(input_dir,dataset):
 
          
 
-def run_docker_container(image_name, databases_dir, input_dir, dataset, threads, log_file):
+def run_docker_container(image_name, databases_dir, input_dir, dataset, threads, log_file, mode):
     client = docker.from_env()
     wdir = f'/home/'+input_dir.split('/')[-1]
 
@@ -104,6 +104,7 @@ if __name__ == "__main__":
     parser.add_argument("--image_name", help="Image name", default="conglab/dpam")
     parser.add_argument("--threads", type=int, default=os.cpu_count(), help="Number of threads. Default is to use all CPUs")
     parser.add_argument("--log_file", help="File to save the logs")
+    parser.add_argument("--mode", help="Select between cl=classic or ai=artificial intelligence. Default is classic.")
 
     args = parser.parse_args()
 
@@ -138,5 +139,10 @@ if __name__ == "__main__":
         log_file = input_dir + '/' + args.dataset + '_docker.log'
     else:
         log_file = args.log_file
+
+    if args.mode is None:
+        mode = 'cl'
+    else:
+        mode = args.mode
     
-    run_docker_container(args.image_name,databases_dir, input_dir, args.dataset, args.threads,log_file)
+    run_docker_container(args.image_name,databases_dir, input_dir, args.dataset, args.threads,log_file, mode)
