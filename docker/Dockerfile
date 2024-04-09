@@ -7,7 +7,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-        python3.8 \
         build-essential \
         cmake \
         cuda-command-line-tools-$(cut -f1,2 -d- <<< ${CUDA//./-}) \
@@ -19,12 +18,16 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get autoremove -y \
     && apt-get clean \
-    && wget -q -P /tmp https://repo.anaconda.com/miniconda/Miniconda3-py38_23.11.0-2-Linux-x86_64.sh \
-    && bash /tmp/Miniconda3-py38_23.11.0-2-Linux-x86_64.sh -b -p /opt/conda \
-    && rm /tmp/Miniconda3-py38_23.11.0-2-Linux-x86_64.sh
+    && wget -q -P /tmp https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda \
+    && rm /tmp/Miniconda3-latest-Linux-x86_64.sh
 
 ENV PATH="/opt/conda/bin:$PATH"
+ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
 
+RUN conda install -y python=3.8
+RUN conda install -c conda-forge boost=1.73.0
+RUN conda install -y -c anaconda git
 RUN conda install -y -c bioconda blast-legacy
 RUN conda install -y -c biocore psipred
 RUN conda install -y -c salilab dssp
@@ -61,16 +64,16 @@ RUN git clone --branch v3.3.0 https://github.com/soedinglab/hh-suite.git /tmp/hh
     && popd \
     && rm -rf /tmp/hh-suite
 
-RUN mkdir /opt/DPAM && mkdir /opt/DPAM/scripts
+RUN mkdir /opt/DPAM && mkdir /opt/DPAM/scripts && mkdir /opt/DPAM/weights
 COPY scripts/*.py /opt/DPAM/scripts
 COPY utilities/HHPaths.pm /opt/hhsuite/scripts
 COPY utilities/pdb2fasta /usr/bin
 COPY utilities/foldseek /usr/bin
+COPY utilities/dpam_weights /opt/DPAM/weights
 
 RUN chmod -R +x /opt/DPAM/scripts
+RUN chmod -R +x /opt/DPAM/weights
 
-ENV PATH="/opt/DPAM/scripts:/opt/hhsuite/scripts:/opt/hhsuite/bin:/opt/DaliLite.v5/bin:$PATH"
-ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
+ENV PATH="/opt/DPAM/weights:/opt/DPAM/scripts:/opt/hhsuite/scripts:/opt/hhsuite/bin:/opt/DaliLite.v5/bin:$PATH"
 ENV PERL5LIB="/usr/local/lib/perl5:/opt/hhsuite/scripts"
 ENV OPENBLAS_NUM_THREADS=1
-
