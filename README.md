@@ -83,8 +83,8 @@ For Singularity:
 - `--log_file LOG_FILE`  
   Specify a file where the logs should be saved. If not provided, logs will be displayed in the standard output.
 
-  - `--mode MODE`  
-  Specify mode for domain predictions between 'cl'= classical statistics-based or 'ai'= convolutional neural network-based. If not provided, default mode is 'cl'.
+- `--mode MODE`  
+  Specify mode for domain predictions between 'cl'= classical statistics-based or 'ai'= convolutional neural network-based. If not provided, default mode is cl.
 
 ### Input organization
 
@@ -108,7 +108,7 @@ In the example test in **Quick test** above,
 
 `python run_dpam_docker.py --dataset test --input_dir example  --databases_dir databases --threads 32 --mode cl`
 
-`databases` is the directory uncompressed fromd databases.tar.gz from our lab server. 
+`databases` is the directory uncompressed from databases.tar.gz from our lab server. 
 
 ### Output
 The pipeline will generate log files for each step for debugging. 
